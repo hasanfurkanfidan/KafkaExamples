@@ -5,8 +5,7 @@ namespace Kafka.Producer
 {
     public class KafkaService
     {
-        static string topicName = "mytopic";
-        public async Task CreateTopicAsync()
+        public async Task CreateTopicAsync(string topicName)
         {
             using var adminClient = new AdminClientBuilder(new AdminClientConfig()
             {
@@ -23,6 +22,32 @@ namespace Kafka.Producer
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        public async Task SendSimpleMessageWithNullKey(string topicName)
+        {
+            var config = new ProducerConfig()
+            {
+                BootstrapServers = "localhost:9094"
+            };
+
+            using var producer = new ProducerBuilder<Null, string>(config).Build();
+
+            foreach (var item in Enumerable.Range(1, 10))
+            {
+                var message = new Message<Null, string>()
+                {
+                    Value = $"Message(use case 1) - {item}"
+                };
+
+                var result = await producer.ProduceAsync(topicName, message);
+
+                foreach (var propertyInfo in result.GetType().GetProperties())
+                {
+                    Console.WriteLine($"{propertyInfo.Name} : {propertyInfo.GetValue(result)}");
+                    await Task.Delay(200);
+                }
             }
         }
     }
