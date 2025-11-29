@@ -10,7 +10,7 @@ namespace Kafka.Cosumer
             {
                 BootstrapServers = "localhost:9094",
                 GroupId = "use-case-1-group-1",
-                AutoOffsetReset = AutoOffsetReset.Latest
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             var consumer = new ConsumerBuilder<Null, string>(config).Build();
