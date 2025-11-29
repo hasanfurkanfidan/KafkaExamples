@@ -86,7 +86,8 @@ namespace Kafka.Cosumer
             while (true)
             {
                 var consumeResult = consumer.Consume();
-               
+                var correlationId = consumeResult.Message.Headers.GetLastBytes("correlation_id");
+                var version = consumeResult.Message.Headers.GetLastBytes("v1");
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
             }
         }
