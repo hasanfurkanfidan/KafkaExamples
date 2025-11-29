@@ -163,7 +163,6 @@ namespace Kafka.Cosumer
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
             }
         }
-
         public async Task ConsumeComplexMessageWithAcknowledgeAutoCommitFalse(string topicName)
         {
             var config = new ConsumerConfig()
@@ -189,6 +188,5 @@ namespace Kafka.Cosumer
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
             }
         }
-
     }
 }
