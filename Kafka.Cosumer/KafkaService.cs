@@ -25,7 +25,6 @@ namespace Kafka.Cosumer
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value}");
             }
         }
-
         public async Task ConsumeSimpleMessageWithIntKey(string topicName)
         {
             var config = new ConsumerConfig()
@@ -88,6 +87,30 @@ namespace Kafka.Cosumer
                 var consumeResult = consumer.Consume();
                 var correlationId = consumeResult.Message.Headers.GetLastBytes("correlation_id");
                 var version = consumeResult.Message.Headers.GetLastBytes("v1");
+                Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
+            }
+        }
+        public async Task ConsumeComplexMessageWithComplexKey(string topicName)
+        {
+            var config = new ConsumerConfig()
+            {
+                BootstrapServers = "localhost:9094",
+                GroupId = "use-case-1-group-1",
+                AutoOffsetReset = AutoOffsetReset.Earliest
+            };
+
+            var consumer = new ConsumerBuilder<MessageKey, OrderCreatedEvent>(config)
+                .SetValueDeserializer(new CustomValueDeserializer<OrderCreatedEvent>())
+                .SetKeyDeserializer(new CustomKeyDeserializer<MessageKey>())
+                .Build();
+
+            consumer.Subscribe(topicName);
+
+
+            while (true)
+            {
+                var consumeResult = consumer.Consume();
+
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
             }
         }
