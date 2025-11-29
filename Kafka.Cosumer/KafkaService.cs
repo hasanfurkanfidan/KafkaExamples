@@ -138,5 +138,57 @@ namespace Kafka.Cosumer
                 Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
             }
         }
+        public async Task ConsumeComplexMessageWithAcknowledgeAutoCommitTrue(string topicName)
+        {
+            var config = new ConsumerConfig()
+            {
+                BootstrapServers = "localhost:9094",
+                GroupId = "use-case-1-group-1",
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableAutoCommit = true // Direk offset i kaydır.
+            };
+
+            var consumer = new ConsumerBuilder<MessageKey, OrderCreatedEvent>(config)
+                .SetValueDeserializer(new CustomValueDeserializer<OrderCreatedEvent>())
+                .SetKeyDeserializer(new CustomKeyDeserializer<MessageKey>())
+                .Build();
+
+            consumer.Subscribe(topicName);
+
+
+            while (true)
+            {
+                var consumeResult = consumer.Consume();
+                Console.WriteLine($"TimeStamp : {consumeResult.Message.Timestamp}");
+                Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
+            }
+        }
+
+        public async Task ConsumeComplexMessageWithAcknowledgeAutoCommitFalse(string topicName)
+        {
+            var config = new ConsumerConfig()
+            {
+                BootstrapServers = "localhost:9094",
+                GroupId = "use-case-1-group-1",
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableAutoCommit = false // İşledikten sonra offseti kaydır.
+            };
+
+            var consumer = new ConsumerBuilder<MessageKey, OrderCreatedEvent>(config)
+                .SetValueDeserializer(new CustomValueDeserializer<OrderCreatedEvent>())
+                .SetKeyDeserializer(new CustomKeyDeserializer<MessageKey>())
+                .Build();
+
+            consumer.Subscribe(topicName);
+
+
+            while (true)
+            {
+                var consumeResult = consumer.Consume();
+                Console.WriteLine($"TimeStamp : {consumeResult.Message.Timestamp}");
+                Console.WriteLine($"gelen mesaj : {consumeResult.Message.Value.UserId} key : {consumeResult.Message.Key}");
+            }
+        }
+
     }
 }
