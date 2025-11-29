@@ -3,5 +3,5 @@ using Kafka.Producer;
 
 Console.WriteLine("Kafka Producer");
 KafkaService kafkaService = new();
-await kafkaService.CreateTopicAsync("use-case-3-topic");
-await kafkaService.SendComplexMessageWithIntKey("use-case-3-topic");
+await kafkaService.CreateTopicAsync("ack-topic");
+await kafkaService.SendComplexMessageWithAcknowledge("ack-topic");
