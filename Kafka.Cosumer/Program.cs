@@ -5,4 +5,4 @@ Console.WriteLine("Kafka Consumer 1");
 
 KafkaService kafkaService = new();
 
-await kafkaService.ConsumeSimpleMessageWithNullKey("use-case-1-topic");
+await kafkaService.ConsumeSimpleMessageWithIntKey("use-case-2-topic");
